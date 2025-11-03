@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Translator">
+    <meta name="description" content="KI-gestütztes Übersetzungs- und Textkorrektur-Tool mit Puter.com API">
+
+    <title>Puter Translator - PWA</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Puter SDK -->
+    <script src="https://js.puter.com/v2/"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="theme-toggle" id="themeToggle" title="Theme wechseln">🌙</button>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="logo">
+                        <div>🌍</div>
+                        <h1>Translator & Writer</h1>
+                    </div>
+
+                    <!-- Puter Login -->
+                    <div class="puter-login-container">
+                        <button id="puterLoginBtn" class="btn-puter-login">
+                            <span id="puterLoginIcon">🔐</span>
+                            <span id="puterLoginText">Puter Login</span>
+                        </button>
+                        <div id="puterLoginStatus" class="puter-login-status" style="display: none;">
+                            <span class="status-indicator"></span>
+                            <span id="puterUsername"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Translator Controls -->
+                <div class="controls" id="translatorControls">
+                    <div class="language-controls">
+                    <select class="language-select" id="sourceLanguage">
+                        <option value="auto">Auto-Detect</option>
+                        <option value="de">Deutsch</option>
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="it">Italiano</option>
+                        <option value="pt">Português</option>
+                        <option value="uk">Українська</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                        <option value="zh">中文</option>
+                        <option value="ar">العربية</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="tr">Türkçe</option>
+                        <option value="pl">Polski</option>
+                        <option value="nl">Nederlands</option>
+                        <option value="sv">Svenska</option>
+                        <option value="da">Dansk</option>
+                        <option value="no">Norsk</option>
+                        <option value="fi">Suomi</option>
+                        <option value="cs">Čeština</option>
+                        <option value="sk">Slovenčina</option>
+                        <option value="hu">Magyar</option>
+                        <option value="ro">Română</option>
+                        <option value="bg">Български</option>
+                        <option value="hr">Hrvatski</option>
+                        <option value="sl">Slovenščina</option>
+                        <option value="et">Eesti</option>
+                        <option value="lv">Latviešu</option>
+                        <option value="lt">Lietuvių</option>
+                        <option value="el">Ελληνικά</option>
+                        <option value="he">עברית</option>
+                        <option value="fa">فارسی</option>
+                        <option value="ur">اردو</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="th">ไทย</option>
+                        <option value="vi">Tiếng Việt</option>
+                        <option value="id">Bahasa Indonesia</option>
+                        <option value="ms">Bahasa Melayu</option>
+                        <option value="tl">Filipino</option>
+                        <option value="sw">Kiswahili</option>
+                        <option value="af">Afrikaans</option>
+                    </select>
+                    
+                    <button class="swap-btn" id="swapLanguages" title="Sprachen tauschen">⇄</button>
+                    
+                    <select class="language-select" id="targetLanguage">
+                        <option value="en">English</option>
+                        <option value="de">Deutsch</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="it">Italiano</option>
+                        <option value="pt">Português</option>
+                        <option value="uk">Українська</option>
+                        <option value="ja">日本語</option>
+                        <option value="ko">한국어</option>
+                        <option value="zh">中文</option>
+                        <option value="ar">العربية</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="tr">Türkçe</option>
+                        <option value="pl">Polski</option>
+                        <option value="nl">Nederlands</option>
+                        <option value="sv">Svenska</option>
+                        <option value="da">Dansk</option>
+                        <option value="no">Norsk</option>
+                        <option value="fi">Suomi</option>
+                        <option value="cs">Čeština</option>
+                        <option value="sk">Slovenčina</option>
+                        <option value="hu">Magyar</option>
+                        <option value="ro">Română</option>
+                        <option value="bg">Български</option>
+                        <option value="hr">Hrvatski</option>
+                        <option value="sl">Slovenščina</option>
+                        <option value="et">Eesti</option>
+                        <option value="lv">Latviešu</option>
+                        <option value="lt">Lietuvių</option>
+                        <option value="el">Ελληνικά</option>
+                        <option value="he">עברית</option>
+                        <option value="fa">فارسی</option>
+                        <option value="ur">اردو</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="ta">தমிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="th">ไทย</option>
+                        <option value="vi">Tiếng Việt</option>
+                        <option value="id">Bahasa Indonesia</option>
+                        <option value="ms">Bahasa Melayu</option>
+                        <option value="tl">Filipino</option>
+                        <option value="sw">Kiswahili</option>
+                        <option value="af">Afrikaans</option>
+                    </select>
+                </div>
+                
+                <div class="mode-tabs">
+                    <button class="mode-tab active" id="translatorTab" data-mode="translator">
+                        📝 Übersetzer
+                    </button>
+                    <button class="mode-tab" id="writerTab" data-mode="writer">
+                        ✏️ Writer
+                    </button>
+                </div>
+                
+                <select class="language-select" id="modelSelector">
+                    <optgroup label="⚡ Schnell & Effizient">
+                        <option value="gpt-4o-mini">GPT-4o Mini</option>
+                        <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                    </optgroup>
+                    <optgroup label="🚀 Premium Modelle">
+                        <option value="gpt-5">GPT-5</option>
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="claude-sonnet-4">Claude Sonnet 4</option>
+                        <option value="claude-opus-4">Claude Opus 4</option>
+                    </optgroup>
+                    <optgroup label="🧠 Reasoning">
+                        <option value="o1">O1</option>
+                        <option value="o3">O3</option>
+                    </optgroup>
+                    <optgroup label="🔬 Andere">
+                        <option value="mistral-large-latest">Mistral Large</option>
+                        <option value="grok-beta">Grok Beta</option>
+                    </optgroup>
+                </select>
+                </div>
+
+                <!-- Writer Controls -->
+                <div class="controls" id="writerControls" style="display: none;">
+                    <div class="language-controls">
+                        <select class="language-select" id="writerLanguageSelectHeader" title="Sprache für Korrektur auswählen">
+                            <option value="de">Deutsch</option>
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="it">Italiano</option>
+                            <option value="pt">Português</option>
+                            <option value="uk">Українська</option>
+                            <option value="ja">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="zh">中文</option>
+                            <option value="ar">العربية</option>
+                            <option value="hi">हिन्दी</option>
+                            <option value="tr">Türkçe</option>
+                            <option value="pl">Polski</option>
+                            <option value="nl">Nederlands</option>
+                            <option value="sv">Svenska</option>
+                            <option value="da">Dansk</option>
+                            <option value="no">Norsk</option>
+                            <option value="fi">Suomi</option>
+                            <option value="cs">Čeština</option>
+                            <option value="sk">Slovenčina</option>
+                            <option value="hu">Magyar</option>
+                            <option value="ro">Română</option>
+                            <option value="bg">Български</option>
+                            <option value="hr">Hrvatski</option>
+                            <option value="sl">Slovenščina</option>
+                            <option value="et">Eesti</option>
+                            <option value="lv">Latviešu</option>
+                            <option value="lt">Lietuvių</option>
+                            <option value="el">Ελληνικά</option>
+                            <option value="he">עברית</option>
+                            <option value="fa">فارسی</option>
+                            <option value="ur">اردو</option>
+                            <option value="bn">বাংলা</option>
+                            <option value="ta">தমிழ্</option>
+                            <option value="te">తెలుగు</option>
+                            <option value="ml">മലയാളം</option>
+                            <option value="th">ไทย</option>
+                            <option value="vi">Tiếng Việt</option>
+                            <option value="id">Bahasa Indonesia</option>
+                            <option value="ms">Bahasa Melayu</option>
+                            <option value="tl">Filipino</option>
+                            <option value="sw">Kiswahili</option>
+                            <option value="af">Afrikaans</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mode-tabs">
+                        <button class="mode-tab" id="translatorTab2" data-mode="translator">
+                            📝 Übersetzer
+                        </button>
+                        <button class="mode-tab active" id="writerTab2" data-mode="writer">
+                            ✏️ Writer
+                        </button>
+                    </div>
+                    
+                    <select class="language-select" id="modelSelector2">
+                        <optgroup label="⚡ Schnell & Effizient">
+                            <option value="gpt-4o-mini">GPT-4o Mini</option>
+                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                        </optgroup>
+                        <optgroup label="🚀 Premium Modelle">
+                            <option value="gpt-5">GPT-5</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="claude-sonnet-4">Claude Sonnet 4</option>
+                            <option value="claude-opus-4">Claude Opus 4</option>
+                        </optgroup>
+                        <optgroup label="🧠 Reasoning">
+                            <option value="o1">O1</option>
+                            <option value="o3">O3</option>
+                        </optgroup>
+                        <optgroup label="🔬 Andere">
+                            <option value="mistral-large-latest">Mistral Large</option>
+                            <option value="grok-beta">Grok Beta</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tab-container">
+            <div class="tab-navigation">
+                <button class="tab-button active" onclick="switchTab('translator')">
+                    <span class="tab-icon">🌍</span>
+                    <span class="tab-label">Translator</span>
+                </button>
+                <button class="tab-button" onclick="switchTab('pwa')">
+                    <span class="tab-icon">📱</span>
+                    <span class="tab-label">PWA Info</span>
+                </button>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <!-- Translator Tab -->
+            <div id="translator-tab" class="tab-pane active">
+            <div class="translator-panel">
+                <!-- Translator Mode -->
+                <div class="translation-container" id="translatorMode">
+                    <div class="input-panel">
+                        <div class="panel-header">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div class="panel-title" id="inputPanelTitle">Text eingeben</div>
+                                <button class="expand-btn" id="expandInputBtn" title="In großem Editor öffnen">🔍</button>
+                                <button class="btn btn-secondary" id="showFavoritesBtn" title="Favoriten anzeigen" style="padding: 6px 12px; font-size: 12px;">
+                                    📚 Favoriten
+                                </button>
+                            </div>
+                            <div class="char-count" id="charCount">0 Zeichen</div>
+                        </div>
+                        
+                        <div class="panel-content">
+                            <textarea 
+                                class="input-textarea" 
+                                id="inputText" 
+                                placeholder="Text zum Übersetzen eingeben..."
+                                maxlength="5000"
+                            ></textarea>
+                        </div>
+                        
+                        <div class="panel-footer">
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" id="clearInput">
+                                    🗑️ Löschen
+                                </button>
+                                <button class="btn btn-secondary" id="pasteInput" title="Aus Zwischenablage einfügen (oder Strg+V)">
+                                    📋 Einfügen
+                                </button>
+                                <button class="btn btn-secondary" id="autoTranslateToggle" title="Auto-Übersetzung umschalten">
+                                    🔄 Auto: Ein
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output-panel">
+                        <div class="panel-header">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div class="panel-title" id="outputPanelTitle">Übersetzung</div>
+                                <button class="expand-btn" id="expandOutputBtn" title="In großer Ansicht öffnen" disabled>🔍</button>
+                                <button class="btn btn-secondary" id="favoriteBtn" disabled title="Als Favorit speichern" style="padding: 6px 12px; font-size: 12px;">
+                                    ⭐ Favorit
+                                </button>
+                            </div>
+                            <div class="char-count" id="outputCharCount">0 Zeichen</div>
+                        </div>
+                        
+                        <div class="panel-content">
+                            <textarea 
+                                class="output-text" 
+                                id="outputText" 
+                                placeholder="Übersetzung erscheint hier..."
+                                readonly
+                            ></textarea>
+                            <div class="loading" id="loadingIndicator" style="display: none;">
+                                <div class="spinner"></div>
+                                <span>Übersetze...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="panel-footer">
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" id="copyTranslation" disabled>
+                                    📋 Kopieren
+                                </button>
+                                <button class="btn btn-primary" id="translateBtn" disabled>
+                                    ✨ Übersetzen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Writer Mode -->
+                <div class="translation-container" id="writerMode" style="display: none;">
+                    <div class="input-panel">
+                        <div class="panel-header">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div class="panel-title">Text eingeben</div>
+                                <button class="expand-btn" id="expandWriterInputBtn" title="In großem Editor öffnen">🔍</button>
+                            </div>
+                            <div class="char-count" id="writerCharCount">0 Zeichen</div>
+                        </div>
+                        
+                        <div class="panel-content">
+                            <textarea 
+                                class="input-textarea" 
+                                id="writerInputText" 
+                                placeholder="Text zum Korrigieren eingeben..."
+                                maxlength="5000"
+                            ></textarea>
+                        </div>
+                        
+                        <div class="panel-footer">
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" id="clearWriterInput">
+                                    🗑️ Löschen
+                                </button>
+                                <button class="btn btn-secondary" id="pasteWriterInput" title="Aus Zwischenablage einfügen (oder Strg+V)">
+                                    📋 Einfügen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="output-panel">
+                        <div class="panel-header">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div class="panel-title">Korrigierter Text</div>
+                                <button class="expand-btn" id="expandWriterOutputBtn" title="In großer Ansicht öffnen" disabled>🔍</button>
+                            </div>
+                            <div class="char-count" id="writerOutputCharCount">0 Zeichen</div>
+                        </div>
+                        
+                        <div class="panel-content">
+                            <textarea 
+                                class="output-text" 
+                                id="writerOutputText" 
+                                placeholder="Korrigierter Text erscheint hier..."
+                                readonly
+                            ></textarea>
+                            <div class="loading" id="writerLoadingIndicator" style="display: none;">
+                                <div class="spinner"></div>
+                                <span>Korrigiere...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="panel-footer">
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary" id="copyWriterOutput" disabled>
+                                    📋 Kopieren
+                                </button>
+                                <button class="btn btn-secondary" id="paraphraseBtn" disabled title="Text umformulieren">
+                                    🔄 Umformulieren
+                                </button>
+                                <button class="btn btn-primary" id="correctBtn" disabled>
+                                    ✏️ Korrigieren
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- End Translator Tab -->
+
+            <!-- PWA Info Tab -->
+            <div id="pwa-tab" class="tab-pane">
+                <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 20px; border-radius: 15px; margin: 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                    <h3 style="margin-bottom: 20px;">🎯 PWA Features & Anleitung</h3>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 15px 0;">
+                        <div>
+                            <h4>📱 PWA Installation</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>Desktop: Install-Icon in der Adressleiste klicken</li>
+                                <li>iOS: Safari → Teilen → "Zum Home-Bildschirm"</li>
+                                <li>Android: Chrome → Menü → "App installieren"</li>
+                                <li>Funktioniert wie eine native App!</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4>✨ Hauptfunktionen</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li><strong>Übersetzung:</strong> 40+ Sprachen unterstützt</li>
+                                <li><strong>Auto-Translate:</strong> Automatische Übersetzung beim Tippen</li>
+                                <li><strong>Writer Mode:</strong> Grammatikkorrektur & Umformulierung</li>
+                                <li><strong>Favoriten:</strong> Speichere häufige Übersetzungen</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4>💾 Datenspeicherung</h4>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li><strong>Mit Puter-Login:</strong> Cloud-Speicherung</li>
+                                <li><strong>Ohne Login:</strong> Lokale Speicherung</li>
+                                <li><strong>Favoriten:</strong> Automatisch gespeichert</li>
+                                <li><strong>Einstellungen:</strong> Bleiben erhalten</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- App Information -->
+                    <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #667eea;">
+                        <h4 style="color: #667eea;">ℹ️ App-Information</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 15px;">
+                            <div>
+                                <p><strong>Version:</strong> <span id="app-version-pwa"></span></p>
+                                <p><strong>Typ:</strong> Progressive Web App (PWA)</p>
+                                <p><strong>KI-Backend:</strong> Puter.com API</p>
+                                <p><strong>Offline:</strong> ✅ UI verfügbar (KI benötigt Internet)</p>
+                            </div>
+
+                            <div>
+                                <h5>💽 Speicher-Information</h5>
+                                <p><strong>Einstellungen:</strong> <span id="storage-size-pwa">Wird berechnet...</span></p>
+                                <p><strong>Favoriten:</strong> <span id="favorites-size-pwa">Wird berechnet...</span></p>
+                                <button onclick="calculateStorageSize()"
+                                        style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px;">
+                                    🔍 Speicher neu berechnen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API Usage & Costs Section -->
+                    <div style="background: rgba(40, 167, 69, 0.1); padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #28a745;">
+                        <h4 style="color: #28a745;">💰 API-Nutzung & Kosten</h4>
+                        <p style="margin: 10px 0;">Zeige detaillierte Informationen über deine API-Nutzung und die entstandenen Kosten.</p>
+
+                        <button onclick="showApiUsage()" id="apiUsageBtn"
+                                style="background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; margin-top: 10px; transition: all 0.3s ease;">
+                            💸 Kosten anzeigen
+                        </button>
+
+                        <!-- Usage Display Area -->
+                        <div id="apiUsageDisplay" style="display: none; margin-top: 20px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <h5 style="color: #667eea; margin-bottom: 15px;">📊 Nutzungsstatistik</h5>
+                                <div id="usageContent"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- App Update Section -->
+                    <div style="background: rgba(255, 255, 255, 0.7); padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #667eea;">
+                        <h4 style="color: #667eea;">🔄 App Aktualisieren</h4>
+                        <p>Lade die neueste Version der App und leere den Browser-Cache. Dies hilft bei Problemen mit veralteten Versionen.</p>
+                        <div style="display: flex; flex-direction: column; gap: 10px; max-width: 400px; margin: 15px 0;">
+                            <button onclick="clearCacheAndReload()"
+                                    style="background: #6c757d; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                                🔄 Cache Leeren & Neu Laden
+                            </button>
+                            <button onclick="hardReload()"
+                                    style="background: #667eea; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                                ⚡ Vollständig Neu Laden
+                            </button>
+                            <div style="font-size: 12px; color: #666; margin-top: 10px; padding: 10px; background: rgba(13, 202, 240, 0.1); border-radius: 5px; border: 1px solid rgba(13, 202, 240, 0.2);">
+                                <strong>✅ Deine Daten bleiben vollständig erhalten!</strong><br>
+                                Diese Funktion löscht nur den App-Cache, nicht deine gespeicherten Einstellungen, Favoriten oder Übersetzungen.
+                            </div>
+                        </div>
+                        <div id="reloadStatus" style="display: none; margin-top: 10px; padding: 10px; border-radius: 5px; font-size: 14px;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- End PWA Info Tab -->
+        </main>
+    </div>
+
+    <!-- Version Info -->
+    <div class="version-info" title="Puter Translator Version"></div>
+
+    <!-- Favoriten Popup -->
+    <div class="favorites-popup" id="favoritesPopup" style="display: none;">
+        <div class="popup-overlay" id="favoritesOverlay"></div>
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3 class="popup-title">⭐ Favoriten</h3>
+                <div class="popup-controls">
+                    <button class="clear-history-btn" id="clearFavorites" title="Favoriten löschen">Löschen</button>
+                    <button class="popup-close-btn" id="closeFavoritesBtn" title="Schließen">×</button>
+                </div>
+            </div>
+            
+            <div class="popup-search">
+                <input type="text" class="search-input" id="favoritesSearch" placeholder="Favoriten durchsuchen...">
+            </div>
+            
+            <div class="popup-list" id="favoritesList">
+                <div style="text-align: center; color: #999; padding: 40px 20px;">
+                    Noch keine Favoriten vorhanden.<br>
+                    <small>Klicke den ⭐ Button um eine Übersetzung zu favorisieren.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Editor Popup -->
+    <div class="text-editor-popup" id="textEditorPopup" style="display: none;">
+        <div class="text-editor-overlay" id="textEditorOverlay"></div>
+        <div class="text-editor-content">
+            <div class="text-editor-header">
+                <h3 class="text-editor-title" id="textEditorTitle">📝 Text Editor</h3>
+                <div class="text-editor-controls">
+                    <div class="text-editor-header-char-count" id="textEditorHeaderCharCount">0 Zeichen</div>
+                    <button class="text-editor-close-btn" id="closeTextEditorBtn" title="Schließen">×</button>
+                </div>
+            </div>
+            
+            <div class="text-editor-body">
+                <textarea 
+                    class="text-editor-textarea" 
+                    id="textEditorTextarea" 
+                    placeholder="Text eingeben..."
+                    maxlength="5000"
+                ></textarea>
+            </div>
+            
+            <div class="text-editor-footer">
+                <div class="text-editor-char-count" id="textEditorCharCount">0 Zeichen</div>
+                <div class="text-editor-actions">
+                    <button class="btn btn-secondary" id="textEditorClear" title="Text löschen">🗑️ Löschen</button>
+                    <button class="btn btn-secondary" id="textEditorPaste" title="Einfügen">📋 Einfügen</button>
+                    <button class="btn btn-primary" id="textEditorSave" title="Übernehmen und schließen">✅ Übernehmen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Viewer Popup -->
+    <div class="text-viewer-popup" id="textViewerPopup" style="display: none;">
+        <div class="text-viewer-overlay" id="textViewerOverlay"></div>
+        <div class="text-viewer-content">
+            <div class="text-viewer-header">
+                <h3 class="text-viewer-title" id="textViewerTitle">👁️ Text Viewer</h3>
+                <div class="text-viewer-controls">
+                    <div class="text-viewer-header-char-count" id="textViewerHeaderCharCount">0 Zeichen</div>
+                    <button class="text-viewer-close-btn" id="closeTextViewerBtn" title="Schließen">×</button>
+                </div>
+            </div>
+            
+            <div class="text-viewer-body">
+                <textarea 
+                    class="text-viewer-textarea" 
+                    id="textViewerTextarea" 
+                    readonly
+                    placeholder="Kein Text zum Anzeigen..."
+                ></textarea>
+            </div>
+            
+            <div class="text-viewer-footer">
+                <div class="text-viewer-char-count" id="textViewerCharCount">0 Zeichen</div>
+                <div class="text-viewer-actions">
+                    <button class="btn btn-primary" id="textViewerCopy" title="Text kopieren">📋 Kopieren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Application JavaScript -->
+    <script src="js/app.js"></script>
+    <script src="js/puter-auth.js"></script>
+    <script src="js/api-usage.js"></script>
+    <script src="version.js"></script>
+</body>
+</html>
