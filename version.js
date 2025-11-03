@@ -1,5 +1,5 @@
 // Version info for Puter Translator
-const version = '1.2.1';
+const version = '1.2.2';
 
 // Display version in the footer
 document.addEventListener('DOMContentLoaded', () => {

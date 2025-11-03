@@ -1068,15 +1068,14 @@
         }
 
         /* Tab Navigation Styles */
-        .tab-container {
-            max-width: 1400px;
-            margin: 10px auto 0;
-            padding: 0 20px;
+        .tab-container-header {
+            width: 100%;
+            margin-top: 15px;
         }
 
         .tab-navigation {
             display: flex;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 15px;
             padding: 8px;
@@ -1148,7 +1147,7 @@
 
         /* Dark mode for tabs */
         body.dark-mode .tab-navigation {
-            background: rgba(44, 62, 80, 0.95);
+            background: rgba(44, 62, 80, 0.8);
         }
 
         body.dark-mode .tab-button {
@@ -1252,9 +1251,8 @@
                 font-size: 11px;
             }
 
-            .tab-container {
-                padding: 0 10px;
-                margin: 15px auto;
+            .tab-container-header {
+                margin-top: 10px;
             }
         }
 
