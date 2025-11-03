@@ -1292,9 +1292,23 @@
                 }
             });
 
-            // Calculate storage when PWA tab is opened
+            // Show/hide translator and writer controls based on selected tab
             if (tabName === 'pwa') {
+                // Hide both translator and writer controls when PWA tab is active
+                if (translatorControls) translatorControls.style.display = 'none';
+                if (writerControls) writerControls.style.display = 'none';
+
+                // Calculate storage when PWA tab is opened
                 setTimeout(() => calculateStorageSize(), 100);
+            } else if (tabName === 'translator') {
+                // Show appropriate controls based on current mode
+                if (settings.currentMode === 'writer') {
+                    if (translatorControls) translatorControls.style.display = 'none';
+                    if (writerControls) writerControls.style.display = 'flex';
+                } else {
+                    if (translatorControls) translatorControls.style.display = 'flex';
+                    if (writerControls) writerControls.style.display = 'none';
+                }
             }
         }
 
