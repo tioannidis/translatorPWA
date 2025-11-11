@@ -2,7 +2,7 @@
 
 Ein modernes, KI-gestütztes Übersetzungs- und Textkorrektur-Tool als Progressive Web App (PWA). Die Anwendung nutzt die [Puter.com](https://puter.com) API für KI-Funktionen und läuft außerhalb von puter.com als eigenständige Web-App mit Offline-Unterstützung.
 
-## ✨ Features
+## ✨ Features.
 
 ### 🔤 Übersetzung
 - **Multi-Language Support**: Unterstützt über 40 Sprachen inklusive Deutsch, Englisch, Spanisch, Französisch, Italienisch, Chinesisch, Japanisch, Russisch und viele mehr
